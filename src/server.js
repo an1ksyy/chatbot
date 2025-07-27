@@ -31,7 +31,6 @@ io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });
 
-// Track users: { username: socket.id }
 const userSockets = {};
 
 const messagesPath = path.join(process.cwd(), 'db', 'messages.json');
@@ -54,7 +53,6 @@ io.on('connection', (socket) => {
     if (!username) return;
     userSockets[username] = socket.id;
 
-    // Fetch chat history between two users
     socket.on('fetch_history', ({ withUser }) => {
         const messages = loadMessages().filter(m =>
             (m.from === username && m.to === withUser) ||
@@ -69,7 +67,6 @@ io.on('connection', (socket) => {
         if (toSocketId) {
             io.to(toSocketId).emit('private_message', msg);
         }
-        // Also echo to sender for consistency
         socket.emit('private_message', msg);
     });
     socket.on('disconnect', () => {

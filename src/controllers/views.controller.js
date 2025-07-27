@@ -13,6 +13,6 @@ export default {
         return res.render('index', { username: req.session.username, users: filteredUsers });
     },
     LOGIN: (req, res) => {
-        return res.render('login');
+        return res.render('login', { error: null });
     }
 }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Chatbot</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-[#0a0a1f] min-h-screen flex items-center justify-center">
+    <div class="w-full h-screen flex items-center justify-center">
+        <div class="w-full max-w-5xl h-[90vh] bg-[#101a3a] rounded-2xl shadow-2xl flex overflow-hidden">
+            <div class="w-1/4 bg-[#18224a] h-full flex flex-col border-r border-[#22336b]">
+                <div class="p-6 pb-2 flex items-center gap-3 border-b border-[#22336b]">
+                    <div class="rounded-full bg-[#600e0e] h-12 w-12"></div>
+                    <div>
+                        <div class="text-lg font-bold text-white"><%= username %></div>
+                        <div class="text-xs text-[#eeeeeeaf]">You</div>
+                    </div>
+                </div>
+                <form action="/logout" method="POST" class="px-6 py-2 border-b border-[#22336b]">
+                    <button type="submit" class="w-full bg-[#e53935] hover:bg-[#b71c1c] text-white rounded-full py-2 font-semibold transition">Logout</button>
+                </form>
+                <div class="flex-1 overflow-y-auto p-2">
+                    <% if (users && users.length) { %>
+                        <% users.forEach(function(user) { %>
+                            <button class="user-btn flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#1e88e5] transition group" data-username="<%= user.username %>">
+                                <div class="rounded-full bg-[#1e88e5] h-10 w-10 flex items-center justify-center text-white font-bold text-lg">
+                                    <%= user.username[0].toUpperCase() %>
+                                </div>
+                                <div class="flex-1 text-left">
+                                    <div class="font-medium text-white group-hover:text-white"><%= user.username %></div>
+                                    <div class="text-xs text-[#eeeeeeaf]">online</div>
+                                </div>
+                            </button>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-[#eeeeeeaf] text-sm">No other users online.</p>
+                    <% } %>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col h-full">
+                <div id="chat-header" class="h-20 bg-[#22336b] flex items-center px-6 border-b border-[#22336b]">
+                    <div id="chat-header-avatar" class="rounded-full bg-[#1e88e5] h-12 w-12 flex items-center justify-center text-white font-bold text-lg hidden"></div>
+                    <div class="ml-4">
+                        <div id="chat-header-username" class="text-xl font-semibold text-white"></div>
+                        <div class="text-xs text-[#eeeeeeaf]" id="chat-header-status"></div>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-y-auto px-8 py-6 bg-[#0a0a1f] flex flex-col gap-2 text-white" id="chat-area">
+                </div>
+                <form class="flex items-center gap-2 p-6 bg-[#101a3a] border-t border-[#22336b]" id="chat-form" autocomplete="off">
+                    <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 rounded-full px-4 py-3 bg-[#22336b] text-white focus:outline-none focus:ring-2 focus:ring-[#1e88e5] text-base" />
+                    <button type="submit" class="bg-[#1e88e5] hover:bg-[#1565c0] text-white rounded-full px-6 py-3 font-semibold text-base transition">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/app.js"></script>
+</body>
+</html>

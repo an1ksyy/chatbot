@@ -20,7 +20,6 @@ app.set('views', path.join(process.cwd(), 'src', 'views'))
 app.use(viewsRouter)
 app.use(express.static(path.join(process.cwd(), 'public')))
 
-// Share session with Socket.io
 import { parse } from 'cookie';
 io.use((socket, next) => {
     const cookie = socket.request.headers.cookie;
